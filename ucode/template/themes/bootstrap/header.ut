@@ -9,37 +9,31 @@
 	import { getuid, getspnam } from 'luci.core';
 
 	const boardinfo = ubus.call('system', 'board');
-	const darkpref = (theme == 'bootstrap-dark' ? 'true' : (theme == 'bootstrap-light' ? 'false' : null));
 
 	http.prepare_content('text/html; charset=UTF-8');
 -%}
 
 <!DOCTYPE html>
-<html lang="{{ dispatcher.lang }}" {{ darkpref ? `data-darkmode="${darkpref}"` : '' }}>
+<html lang="{{ dispatcher.lang }}">
 	<head>
 		<meta charset="utf-8">
 		<title>{{ striptags(`${boardinfo.hostname ?? '?'}${node ? ` - ${node.title}` : ''}`) }} - LuCI</title>
-		{% if (!darkpref): %}
-			<script>
-				var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)'),
-				    rootElement = document.querySelector(':root'),
-				    setDarkMode = function(match) { rootElement.setAttribute('data-darkmode', match.matches) };
-
-				mediaQuery.addEventListener('change', setDarkMode);
-				setDarkMode(mediaQuery);
-			</script>
-		{% endif %}
 		<meta name="viewport" content="initial-scale=1.0">
-		<link rel="stylesheet" href="{{ media }}/cascade.css">
-		<link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="{{ media }}/mobile.css" />
+        <link rel="stylesheet" href="{{ media }}/Inter_font.css"> 
+        <link rel="stylesheet" href="{{ media }}/bootstrap.min.css"> 
+		<link rel="stylesheet" href="{{ media }}/bootstrap-icons.css"> 
+		<link rel="stylesheet" href="{{ media }}/custom.css">
+
 		<link rel="icon" href="{{ media }}/logo_48.png" sizes="48x48">
 		<link rel="icon" href="{{ media }}/logo.svg" sizes="any">
+
 		{% if (node?.css): %}
 		<link rel="stylesheet" href="{{ resource }}/{{ node.css }}">
 		{% endif %}
 		{% if (css): %}
 		<style title="text/css">{{ css }}</style>
 		{% endif %}
+
 		<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
 		<script src="{{ resource }}/cbi.js"></script>
 	</head>
